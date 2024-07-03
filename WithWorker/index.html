@@ -1,0 +1,43 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI free even with Heavy processing</title>
+</head>
+
+<body>
+  <h1>UI free even with Heavy processing</h1>
+  <button id="calcBtn">Calculate Fibonacci (Web Worker)</button>
+  <span id="status">Status: </span>
+  <p>Open console and watch everything free even during the heavy work</p>
+
+  <span>Try change the input text</span>
+  <label for="inputField">Type something:</label>
+  <input type="text" id="inputField">
+  <p id="displayText"></p>
+  <script>
+    const worker = new Worker('./worker.js');
+    let calcBtn = document.getElementById('calcBtn');
+    let inputField = document.getElementById('inputField');
+    let displayText = document.getElementById('displayText');
+    let status = document.getElementById('status');
+    inputField.addEventListener('input', function () {
+      displayText.innerText = 'You typed: ' + inputField.value;
+    });
+    calcBtn.addEventListener('click', calculateWithWorker);
+    function calculateWithWorker() {
+      console.time('fibonacci');
+      worker.postMessage(45);
+      status.innerText = 'Status: calculating Fibonacci...';
+
+      worker.onmessage = function (event) {
+        console.timeEnd('fibonacci');
+        console.log("Worker just finished");
+        console.log('Fibonacci result:', event.data);
+        status.innerText = 'Status: Fibonacci calculated!';
+      };
+    }
+  </script>
+</body>
+</html>
