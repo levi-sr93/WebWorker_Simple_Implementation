@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI blocked due heavy process</title>
+</head>
+
+<body>
+    <h1>UI blocked due heavy process</h1>
+    <button id="calcBtn">Calculate Fibonacci (Blocked Interface)</button>
+    <span id="status">Status: </span>
+    <p>Open console to follow the heavy operation.</p>
+    <span>Try change the input text</span>
+    <label for="inputField">Type something:</label>
+    <input type="text" id="inputField">
+    <p id="displayText"></p>
+    <script>
+        let calcBtn = document.getElementById('calcBtn');
+        let inputField = document.getElementById('inputField');
+        let displayText = document.getElementById('displayText');
+        let status = document.getElementById('status');
+
+        function fibonacci(n) {
+            if (n <= 1) return n;
+            return fibonacci(n - 1) + fibonacci(n - 2);
+        }
+
+        function updateUI(text) {
+            status.innerText = text;
+        }
+
+        calcBtn.addEventListener('click', function () {
+            updateUI('Status: Calculating Fibonacci...')
+            console.time('fibonacci');
+            const result = fibonacci(45); // change this value
+            console.timeEnd('fibonacci');
+
+            console.log('Result:', result);
+            updateUI('Status: Calculated Fibonacci...!');
+
+
+        });
+
+        inputField.addEventListener('input', function () {
+            displayText.innerText = 'You typed: ' + inputField.value;
+        });
+    </script>
+</body>
+
+</html>
